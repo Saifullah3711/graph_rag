@@ -1,0 +1,6 @@
+### Initialize Graph RAG
+==> python -m graphrag.index --init  --root . 
+
+
+### Index the docs
+python -m graphrag.index --root . 
