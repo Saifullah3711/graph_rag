@@ -148,5 +148,5 @@ If you encounter any issues or have questions, please open an issue in the GitHu
 - [Streamlit Chatbot docs](https://docs.streamlit.io/develop/tutorials/llms/build-conversational-apps)
 
 ## Streamlit UI
-![Alt text](readme_imgs/chatbot_st_UI.png)
+![Alt text](readme_imgs/grag_new.png)
 
