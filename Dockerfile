@@ -7,9 +7,8 @@ WORKDIR /app
 # Copy all project files into the container
 COPY . /app
 
-# Upgrade pip and install dependencies
-RUN python -m pip install --upgrade pip && \
-    pip install -r requirements.txt
+# Install dependencies with no cache
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Expose the port for Streamlit
 EXPOSE 8501

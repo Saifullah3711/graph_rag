@@ -2,5 +2,5 @@ graphrag
 pandas
 streamlit
 tiktoken
-dotenv
+python-dotenv
 asyncio
