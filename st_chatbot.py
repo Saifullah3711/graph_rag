@@ -14,12 +14,10 @@ from graphrag.query.indexer_adapters import (
     read_indexer_reports,
     read_indexer_text_units,
 )
-from dotenv import load_dotenv
 import streamlit as st
 import pandas as pd
 import tiktoken
 import asyncio
-import os
 
 st.set_page_config(page_title="GraphRAG Assistant", layout="wide")
 st.title("GraphRAG Assistant")
@@ -29,9 +27,8 @@ if "messages" not in st.session_state:
 
 @st.cache_resource
 def initialize_search_engines():
-    load_dotenv()
-    api_key = os.getenv("GRAPHRAG_API_KEY")
-    llm_model = "gpt-3.5-turbo"
+    api_key = st.secrets["general"]["GRAPHRAG_API_KEY"]
+    llm_model = "gpt-4o"
     embedding_model = "text-embedding-3-small"
     llm = ChatOpenAI(api_key=api_key, model=llm_model, api_type=OpenaiApiType.OpenAI, max_retries=20)
     token_encoder = tiktoken.get_encoding("cl100k_base")
@@ -159,7 +156,8 @@ with st.sidebar:
     st.title("GraphRAG Settings")
     search_type = st.radio(
         "Select Search Type",
-        ["Global Search", "Local Search"],
+        # ["Local Search","Global Search"],
+        ["Local Search"],
         help="""
         Global Search: Best for holistic questions about the entire corpus
         Local Search: Best for specific entity-related questions
@@ -201,7 +199,13 @@ if prompt := st.chat_input(f"Ask a question using {search_type}..."):
         message_placeholder.text(f"Searching using {search_type}...")
         
         try:
-            result = asyncio.run(get_search_results(prompt, search_type))
+            try:
+                loop = asyncio.get_running_loop()
+            except RuntimeError:
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+            
+            result = loop.run_until_complete(get_search_results(prompt, search_type))
             response = result.response
             
             if search_type == "Global Search":
