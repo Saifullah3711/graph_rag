@@ -51,7 +51,6 @@ Traditional RAG systems, while useful, face several limitations when dealing wit
 
 ```bash
 git clone it@github.com:Saifullah3711/graph_rag.git
-
 cd graph_rag
 ```
 
@@ -61,20 +60,31 @@ cd graph_rag
 pip install -r requirements.txt
 ```
 
-3. Set up environment variables
+3. Set up `secrets.toml`
 
-- Create a `.env` file in the root directory.
-- Add your OpenAI API key:
+- Create a `.streamlit` folder in the root directory.
+- Inside `.streamlit`, create a `secrets.toml` file.
+- Add your OpenAI API key to the `secrets.toml` file:
 
+```toml
+[general]
+GRAPHRAG_API_KEY = "your_openai_api_key"
 ```
-GRAPHRAG_API_KEY=your_openai_api_key
-```
+
+This setup is especially useful for deploying the app to **Streamlit Cloud**.
+
+### Streamlit Cloud Deployment
+
+To deploy the app on Streamlit Cloud for demo purposes:
+1. Ensure your `secrets.toml` file is correctly set up as described above.
+2. Push your code to a GitHub repository.
+3. Link your repository to Streamlit Cloud and deploy the app.
 
 ## 💻 Usage
 
-### Using Pre-provided Data
+### Running the Chatbot
 
-To run the chatbot with the pre-provided dataset:
+To run the chatbot locally:
 
 ```bash
 streamlit run st_chatbot.py
@@ -86,55 +96,31 @@ This will launch the Streamlit interface in your default web browser.
 
 To use your own data with the chatbot, follow these steps:
 
-1. **Prepare Your Data**
-
+1. **Prepare Your Data**:
    - Create an `input` folder in the root directory.
-
    - Place your text documents (`.txt` files) in this folder.
 
-
-
-
-
-
-
-
-
-   > Note: Currently, only `.txt` files are supported.
-
-2. **Initialize GraphRAG**
+2. **Initialize GraphRAG**:
 
 ```bash
 python -m graphrag.index --init --root .
 ```
 
-3. **Index Your Documents**
+3. **Index Your Documents**:
 
 ```bash
 python -m graphrag.index --root .
 ```
 
-This process will:
-
-- Slice input corpus into analyzable TextUnits.
-- Extract entities, relationships, and key claims using LLM.
-- Perform hierarchical clustering.
-- Generate community summaries.
-- Create the necessary graph structure.
-- Index the content for efficient retrieval.
-
-4. **Add More Documents (Optional)**
-
+4. **Add More Documents (Optional)**:
    - Add new `.txt` files to the `input` folder.
    - Re-run the indexing process:
 
-   ```bash
-   python -m graphrag.index --root .
-   ```
+```bash
+python -m graphrag.index --root .
+```
 
-   Only the new documents will be processed and added to the existing index, preserving previously indexed content.
-
-5. **Launch the Chatbot**
+5. **Launch the Chatbot**:
 
 ```bash
 streamlit run st_chatbot.py
@@ -145,14 +131,12 @@ streamlit run st_chatbot.py
 GraphRAG follows a sophisticated process:
 
 1. **Indexing Phase**:
-
    - Document Slicing: Breaks down documents into manageable TextUnits.
    - Entity Extraction: Identifies key entities, relationships, and claims.
    - Clustering: Groups related information using the Leiden technique.
    - Summary Generation: Creates hierarchical summaries of communities.
 
 2. **Query Phase**:
-
    - Global Search: For corpus-wide understanding.
    - Local Search: For entity-specific exploration.
    - Context Enhancement: Uses community structures for better responses.
@@ -170,7 +154,7 @@ GraphRAG follows a sophisticated process:
 ## ⚠️ Limitations
 
 - Currently supports only `.txt` files.
-- Requires OpenAI API key which could be costly for large documents.
+- Requires OpenAI API key, which could be costly for large documents.
 - Initial processing time for large documents.
 - Resource intensive for very large datasets.
 
@@ -192,4 +176,3 @@ If you encounter any issues or have questions, please open an issue in the GitHu
 ## Streamlit UI
 
 ![Alt text](readme_imgs/grag_new.png)
-
